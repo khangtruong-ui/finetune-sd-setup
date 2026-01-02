@@ -708,7 +708,7 @@ def main():
 
                         )
                     subprocess.run(['gsutil -m cp -r ./sd-full-finetuned/* gs://khang-sd-ft/full'])
-                    subprocess.run(['gsutil -m cp -r *.log gs://khang-sd-ft/log'])
+                    subprocess.run(['gsutil -m cp *.log gs://khang-sd-ft/log'])
             
             checkpoint(state)
 
