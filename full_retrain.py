@@ -35,6 +35,7 @@ from huggingface_hub import create_repo, upload_folder
 from torchvision import transforms
 from tqdm.auto import tqdm
 from transformers import CLIPImageProcessor, CLIPTokenizer, FlaxCLIPTextModel, set_seed
+import subprocess
 
 from diffusers import (
     FlaxAutoencoderKL,
@@ -702,6 +703,7 @@ def main():
                             ignore_patterns=["step_*", "epoch_*"],
 
                         )
+                    subprocess.run(['gsutil cp -r ./sd-full-finetuned/* gs://khang-sd-ft/full'])
             
             checkpoint(state)
 
