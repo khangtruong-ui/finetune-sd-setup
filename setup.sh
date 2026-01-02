@@ -6,7 +6,7 @@ mkdir -p ./sd-full-finetuned
 echo "Test GCS connection" > ./sd-full-finetuned/test.txt
 gsutil cp -r ./sd-full-finetuned/test.txt gs://khang-sd-ft/full
 
-gsutil cp gs://khang-sd-ft/full/* ./sd-full-finetuned
+gsutil -m cp gs://khang-sd-ft/full/* ./sd-full-finetuned
 
 pip install -q jax[tpu] flax optax transformers datasets diffusers==0.36 torch torchvision PIL matplotlib -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
 
