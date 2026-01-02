@@ -1,2 +1,3 @@
-sh ./setup.sh
-sh ./full_retrain.sh
+sh ./setup.sh > setup.log
+sh ./full_retrain.sh > retrain.log
+gsutil cp *.log gs://khang-sd-ft/log
