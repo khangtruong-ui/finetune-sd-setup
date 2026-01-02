@@ -703,8 +703,8 @@ def main():
                             ignore_patterns=["step_*", "epoch_*"],
 
                         )
-                    subprocess.run(['gsutil cp -r ./sd-full-finetuned/* gs://khang-sd-ft/full'])
-                    subprocess.run(['gsutil cp -r *.log gs://khang-sd-ft/log'])
+                    subprocess.run(['gsutil -m cp -r ./sd-full-finetuned/* gs://khang-sd-ft/full'])
+                    subprocess.run(['gsutil -m cp -r *.log gs://khang-sd-ft/log'])
             
             checkpoint(state)
 
