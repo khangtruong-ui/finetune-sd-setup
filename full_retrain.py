@@ -641,8 +641,9 @@ def main():
     global_step = 0
 
     with open('process.log', 'w') as process_file:
-
-        epochs = tqdm(range(args.num_train_epochs), desc="Epoch ... ", position=0, file=process_file)
+        with open('./sd-full-finetuned/epoch.txt') as f:
+            start_epoch = int(f.read())
+        epochs = tqdm(range(start_epoch, args.num_train_epochs), desc="Epoch ... ", position=0, file=process_file)
         for epoch in epochs:
             # ======================== Training ================================
 
@@ -694,6 +695,9 @@ def main():
                             "safety_checker": safety_checker.params,
                         },
                     )
+
+                    with open('./sd-full-finetuned/epoch.txt', 'w') as f:
+                        f.write(str(epoch + 1))
 
                     if args.push_to_hub:
                         upload_folder(
