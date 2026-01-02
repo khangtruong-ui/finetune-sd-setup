@@ -3,7 +3,7 @@ python full_retrain.py \
     --dataset_name="KhangTruong/NWPU_Split" \
     --resolution=256 --center_crop --random_flip \
     --train_batch_size=4 \
-    --num_train_epochs=300 \
+    --num_train_epochs=1 \
     --learning_rate=1e-05 \
     --max_grad_norm=1 \
     --revision="flax"\
