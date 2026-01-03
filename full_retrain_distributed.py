@@ -459,7 +459,11 @@ def main():
             {"input_ids": examples['input_ids']}, padding="max_length", max_length=tokenizer.model_max_length, return_tensors="np"
         )
 
-        return examples
+        ret = dict(
+            input_ids=examples['input_ids'],
+            pixel_values=examples['pixel_values']
+        )
+        return ret
 
     if args.max_train_samples is not None:
         dataset["train"] = dataset["train"].shuffle(seed=args.seed).select(range(args.max_train_samples))
