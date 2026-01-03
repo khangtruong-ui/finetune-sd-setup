@@ -516,7 +516,7 @@ def main():
         dtype=weight_dtype,
     )
 
-    unet_params = add_kernel_recursive(unet_params)
+    # unet_params = add_kernel_recursive(unet_params)
     unet_params = random_init(unet_params)
     unet_params = model_sharding(unet_params)
     
