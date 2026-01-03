@@ -460,7 +460,7 @@ def main():
         )
 
         ret = dict(
-            input_ids=examples['input_ids'],
+            input_ids=examples['input_ids']['input_ids'],
             pixel_values=examples['pixel_values']
         )
         return ret
