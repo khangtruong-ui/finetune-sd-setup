@@ -463,7 +463,7 @@ def main():
         # Set the training transforms
     train_dataset = dataset["train"].with_transform(preprocess_train)
     sampler = grain.IndexSampler(
-        num_records=len(data_source),
+        num_records=len(train_dataset),
         shard_options=grain.ShardOptions(
             shard_index=jax.process_index(), 
             shard_count=jax.process_count(),
