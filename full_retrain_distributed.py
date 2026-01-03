@@ -478,7 +478,7 @@ def main():
         data_source=train_dataset,
         sampler=sampler,
         operations=[
-            grain.Batch(batch_size=args.batch_size)
+            grain.Batch(batch_size=args.train_batch_size)
         ]
     )
 
