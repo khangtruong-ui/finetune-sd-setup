@@ -455,6 +455,9 @@ def main():
         images = [image.convert("RGB") for image in examples[image_column]]
         examples["pixel_values"] = jnp.array([train_transforms(image) for image in images])
         examples["input_ids"] = tokenize_captions(examples)
+        examples['input_ids'] = tokenizer.pad(
+            {"input_ids": examples['input_ids']}, padding="max_length", max_length=tokenizer.model_max_length, return_tensors="np"
+        )
 
         return examples
 
