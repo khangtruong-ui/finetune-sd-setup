@@ -1,4 +1,4 @@
-runuser -u 'khang_truong' -- python full_retrain.py \
+runuser -u 'khang_truong' -- python full_retrain_distributed.py \
     --pretrained_model_name_or_path="./sd-full-finetuned" \
     --dataset_name="KhangTruong/NWPU_Split" \
     --resolution=256 --center_crop --random_flip \
