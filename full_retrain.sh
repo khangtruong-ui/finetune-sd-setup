@@ -1,3 +1,7 @@
+# Change ownership of the model and script directory to khang_truong
+sudo chown -R khang_truong:khang_truong .
+
+
 runuser -u 'khang_truong' -- python full_retrain_distributed.py \
     --pretrained_model_name_or_path="./sd-full-finetuned" \
     --dataset_name="KhangTruong/NWPU_Split" \
