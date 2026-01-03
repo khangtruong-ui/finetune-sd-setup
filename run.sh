@@ -1,5 +1,5 @@
 echo "===== PWD: $(pwd) ====="
 
-sh ./setup.sh > setup.log 2>&1
+sh ./setup.sh "$1" > setup.log 2>&1
 sh ./full_retrain.sh > retrain.log 2>&1
 gsutil cp *.log gs://khang-sd-ft/log
