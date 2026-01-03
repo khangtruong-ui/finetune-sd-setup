@@ -5,8 +5,11 @@ echo "===== TEST GCS CONNECTION ====="
 mkdir -p ./sd-full-finetuned
 chmod -R 777 .
 echo "Test GCS connection" > ./sd-full-finetuned/test.txt
-gsutil cp -r ./sd-full-finetuned/test.txt gs://khang-sd-ft/full
-
+if [ "$1" = "reset" ]; then 
+  gsutil cp -r ./sd-full-finetuned/test.txt gs://khang-sd-ft/full
+else
+  gsutil cp -r ./sd-full-finetuned/test.txt gs://khang-sd-ft/original_weights
+fi
 gsutil -m cp -r gs://khang-sd-ft/full/* ./sd-full-finetuned
 
 echo "====== PIP INSTALL EVERYTHING ====="
