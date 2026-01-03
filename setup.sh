@@ -5,6 +5,7 @@ echo "===== TEST GCS CONNECTION ====="
 mkdir -p ./sd-full-finetuned
 chmod -R 777 .
 echo "Test GCS connection" > ./sd-full-finetuned/test.txt
+echo "Reset argument: $1"
 if [ "$1" != "reset" ]; then 
   gsutil cp -r ./sd-full-finetuned/test.txt gs://khang-sd-ft/full
 else
