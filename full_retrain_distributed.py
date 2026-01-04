@@ -54,7 +54,7 @@ logger = logging.getLogger(__name__)
 
 jax.distributed.initialize()
 
-mesh = Mesh(np.array(jax.local_devices()).reshape((-1, 1)), ('data', 'kernel',))
+mesh = Mesh(np.array(jax.devices()).reshape((-1, 1)), ('data', 'kernel',))
 kernel_sharding = NamedSharding(mesh, P(None, 'kernel'))
 conv_sharding = NamedSharding(mesh, P(None, None, None, 'kernel'))
 sharding = NamedSharding(mesh, P('data'))
@@ -310,7 +310,7 @@ def extract_kernel(unet_weights):
     return path_val
 
 def model_sharding(unet_weights):
-    num_devices = jax.local_device_count()
+    num_devices = jax.device_count()
     
     def mapper(path, x):
         addr = '/'.join(u.key for u in path)
@@ -486,7 +486,7 @@ def main():
         sampler=sampler,
         operations=[
             grain.Batch(
-                batch_size=args.train_batch_size * jax.local_device_count(),
+                batch_size=args.train_batch_size * jax.device_count(),
                 drop_remainder=True
             )
         ]
