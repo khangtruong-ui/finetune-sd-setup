@@ -709,8 +709,9 @@ def main():
                         )
                     subprocess.run('gsutil -m cp -r ./sd-full-finetuned/* gs://khang-sd-ft/full', shell=True)
                     subprocess.run('gsutil -m cp *.log gs://khang-sd-ft/log', shell=True)
-            
-            checkpoint(state)
+                    
+            if epoch % 10 == 0:
+                checkpoint(state)
 
 
 if __name__ == "__main__":
