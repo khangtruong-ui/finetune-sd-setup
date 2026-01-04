@@ -498,7 +498,7 @@ def main():
         sampler=sampler,
         operations=[
             grain.Batch(
-                batch_size=args.train_batch_size * jax.device_count(),
+                batch_size=args.train_batch_size * jax.local_device_count(),
                 drop_remainder=True
             )
         ]
