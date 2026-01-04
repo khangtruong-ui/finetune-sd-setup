@@ -707,8 +707,10 @@ def main():
                             ignore_patterns=["step_*", "epoch_*"],
 
                         )
-                    subprocess.run('gsutil -m cp -r ./sd-full-finetuned/* gs://khang-sd-ft/full', shell=True)
-                    subprocess.run('gsutil -m cp *.log gs://khang-sd-ft/log', shell=True)
+
+                    gs_directory = os.getenv('SAVE_DIR')
+                    subprocess.run(f'gsutil -m cp -r ./sd-full-finetuned/* {gs_directory}/full', shell=True)
+                    subprocess.run(f'gsutil -m cp *.log {gs_directory}/log', shell=True)
                     
             if epoch % 40 == 0:
                 checkpoint(state)
