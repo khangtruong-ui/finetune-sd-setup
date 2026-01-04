@@ -666,6 +666,13 @@ def main():
     text_encoder_params = jax.tree.map(lambda x: distribute_device(x, no_sharding, replicate=True), text_encoder.params)
     vae_params = jax.tree.map(lambda x: distribute_device(x, no_sharding, replicate=True), vae_params)
 
+    {
+        "text_encoder": jax.device_get(text_encoder_params),
+        "vae": jax.device_get(vae_params),
+        "unet": jax.device_get(state.params),
+        "safety_checker": jax.device_get(safety_checker.params),
+    }
+
     # Train!
     num_update_steps_per_epoch = math.ceil(len(train_dataloader))
 
