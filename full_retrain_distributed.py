@@ -520,7 +520,7 @@ def main():
 
         return batch
 
-    total_train_batch_size = args.train_batch_size * jax.device_count()
+    total_train_batch_size = args.train_batch_size * jax.device_count() * jax.process_count()
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, shuffle=True, collate_fn=collate_fn, batch_size=total_train_batch_size, drop_last=True
     )
@@ -689,8 +689,6 @@ def main():
             start_epoch = int(f.read())
         epochs = tqdm(range(start_epoch, args.num_train_epochs), desc="Epoch ... ", position=0, file=process_file)
         iter_loader = iter(loader)
-
-        first_time = True
         
         for epoch in epochs:
             # ======================== Training ================================
@@ -700,12 +698,7 @@ def main():
             train_step_progress_bar = tqdm(total=steps_per_epoch, desc="Training...", position=1, leave=False, file=process_file)
             # train
             for _, batch in zip(range(steps_per_epoch), iter_loader):
-                unsharded_batch = batch
                 batch = jax.tree.map(lambda x: distribute_device(x, sharding), batch)
-                if first_time:
-                    first_time = False
-                    with open('devices.log', 'a') as f:
-                        f.write(f"\n\nArray devices: {jax.tree.map(lambda x: x.device, batch)}\n\nUnsharded array devices: {jax.tree.map(lambda x: x.device, unsharded_batch)}")
                 
                 state, train_metric, train_rngs = p_train_step(state, text_encoder_params, vae_params, batch, train_rngs)
                 train_metrics.append(train_metric)
