@@ -310,7 +310,7 @@ def extract_kernel(unet_weights):
     return path_val
 
 def model_sharding(unet_weights):
-    num_devices = jax.device_count()
+    num_devices = jax.local_device_count()
     
     def mapper(path, x):
         addr = '/'.join(u.key for u in path)
