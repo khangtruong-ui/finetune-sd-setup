@@ -676,15 +676,19 @@ def main():
         with open('./sd-full-finetuned/epoch.txt') as f:
             start_epoch = int(f.read())
         epochs = tqdm(range(start_epoch, args.num_train_epochs), desc="Epoch ... ", position=0, file=process_file)
+        first_time = True
         for epoch in epochs:
             # ======================== Training ================================
-
             train_metrics = []
 
             steps_per_epoch = len(train_dataset) // total_train_batch_size
             train_step_progress_bar = tqdm(total=steps_per_epoch, desc="Training...", position=1, leave=False, file=process_file)
             # train
             for batch in loader:
+                if first_time:
+                    first_time = False
+                    print(jax.tree.map(jnp.shape, batch), file=process_file)
+                
                 batch = jax.tree.map(lambda x: jax.device_put(x, sharding), batch)
                 state, train_metric, train_rngs = p_train_step(state, text_encoder_params, vae_params, batch, train_rngs)
                 train_metrics.append(train_metric)
