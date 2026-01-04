@@ -15,5 +15,6 @@ echo "====== PIP INSTALL EVERYTHING ====="
 pip install -q jax[tpu] flax optax transformers==4.57.3 datasets diffusers==0.36 torch torchvision Pillow matplotlib grain -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
 echo "===== DONE PIP INSTALL EVERYTHING ====="
 chmod -R 777 .
+chown -R khang_truong:khang_truong .
 # cp attention_flax.py $(pip list -v | grep diffusers | awk '{print $3}')/diffusers/models/attention_flax.py
 
