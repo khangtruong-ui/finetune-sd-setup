@@ -315,6 +315,8 @@ def extract_kernel(unet_weights):
 
 
 def distribute_device(tensor, sharding, replicate=False):
+    if type(tensor) in [int, float, str]:
+        return tensor
     global_shape = (tensor.shape[0] * jax.process_count(),) + tensor.shape[1:] if not replicate else tensor.shape
     global_array = jax.make_array_from_process_local_data(sharding, tensor, global_shape)
     return global_array
