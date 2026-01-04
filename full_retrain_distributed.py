@@ -697,7 +697,7 @@ def main():
                 if first_time:
                     first_time = False
                     with open('devices.log', 'a') as f:
-                        f.write(f"\n\nArray devices: {jax.tree.map(lambda x: x.devices(), batch)}\n\nUnsharded array devices: {jax.tree.map(lambda x: x.devices(), unsharded_batch)}")
+                        f.write(f"\n\nArray devices: {jax.tree.map(lambda x: x.device(), batch)}\n\nUnsharded array devices: {jax.tree.map(lambda x: x.device(), unsharded_batch)}")
                 
                 state, train_metric, train_rngs = p_train_step(state, text_encoder_params, vae_params, batch, train_rngs)
                 train_metrics.append(train_metric)
