@@ -54,7 +54,7 @@ logger = logging.getLogger(__name__)
 
 jax.distributed.initialize()
 
-mesh = Mesh(np.array(jax.devices()).reshape((-1, 2)), ('data', 'kernel',))
+mesh = Mesh(np.array(jax.local_devices()).reshape((-1, 1)), ('data', 'kernel',))
 kernel_sharding = NamedSharding(mesh, P(None, 'kernel'))
 conv_sharding = NamedSharding(mesh, P(None, None, None, 'kernel'))
 sharding = NamedSharding(mesh, P('data'))
