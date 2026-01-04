@@ -760,8 +760,9 @@ def main():
                             ignore_patterns=["step_*", "epoch_*"],
 
                         )
-                    subprocess.run('gsutil -m cp -r ./sd-full-finetuned/* gs://khang-sd-ft/full', shell=True)
-                    subprocess.run('gsutil -m cp *.log gs://khang-sd-ft/log', shell=True)
+                    gs_directory = os.getenv('SAVE_DIR')
+                    subprocess.run('gsutil -m cp -r ./sd-full-finetuned/* SAVE_DIR/full', shell=True)
+                    subprocess.run('gsutil -m cp *.log SAVE_DIR/log', shell=True)
             
             checkpoint(state)
 
