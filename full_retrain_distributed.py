@@ -485,7 +485,10 @@ def main():
         data_source=train_dataset,
         sampler=sampler,
         operations=[
-            grain.Batch(batch_size=args.train_batch_size * jax.local_device_count())
+            grain.Batch(
+                batch_size=args.train_batch_size * jax.local_device_count(),
+                drop_remainder=True
+            )
         ]
     )
 
