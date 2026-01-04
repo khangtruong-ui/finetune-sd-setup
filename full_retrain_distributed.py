@@ -662,7 +662,7 @@ def main():
     p_train_step = train_step
 
     # Replicate the train state on each device
-    state = jax.tree.map(lambda x: distribute_device(x, no_sharding, replicate=True), state)
+    # state = jax.tree.map(lambda x: distribute_device(x, no_sharding, replicate=True), state)
     text_encoder_params = jax.tree.map(lambda x: distribute_device(x, no_sharding, replicate=True), text_encoder.params)
     vae_params = jax.tree.map(lambda x: distribute_device(x, no_sharding, replicate=True), vae_params)
 
