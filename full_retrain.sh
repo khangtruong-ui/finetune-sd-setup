@@ -1,5 +1,5 @@
 # Change ownership of the model and script directory to khang_truong
-sudo chown -R khang_truong:khang_truong .
+sudo chown -R khang_truong:khang_truong ./home/khang
 
 
 runuser -u 'khang_truong' -- python full_retrain_distributed.py \
