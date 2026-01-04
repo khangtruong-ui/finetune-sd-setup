@@ -60,7 +60,7 @@ with open('devices.log', 'w') as f:
     sharding = NamedSharding(mesh, P('data'))
     non_sharding = no_sharding = NamedSharding(mesh, P())
 
-    s = f"Mesh: {mesh}\nSharding: {sharding}\nNo sharding: {non_sharding}"
+    s = f"Mesh: {mesh}\nSharding: {sharding}\nNo sharding: {non_sharding}\nDevices: {jax.devices()}"
     f.write(s)
 
 
