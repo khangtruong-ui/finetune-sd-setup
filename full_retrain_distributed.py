@@ -692,11 +692,12 @@ def main():
             train_step_progress_bar = tqdm(total=steps_per_epoch, desc="Training...", position=1, leave=False, file=process_file)
             # train
             for _, batch in zip(range(steps_per_epoch), iter_loader):
+                unsharded_batch = batch
                 batch = jax.tree.map(lambda x: jax.device_put(x, sharding), batch)
                 if first_time:
                     first_time = False
                     with open('devices.log', 'a') as f:
-                        f.write(f"\nArray devices: {jax.tree.map(lambda x: x.devices(), batch)}")
+                        f.write(f"\n\nArray devices: {jax.tree.map(lambda x: x.devices(), batch)}\n\nUnsharded array devices: {jax.tree.map(lambda x: x.devices(), unsharded_batch)}")
                 
                 state, train_metric, train_rngs = p_train_step(state, text_encoder_params, vae_params, batch, train_rngs)
                 train_metrics.append(train_metric)
