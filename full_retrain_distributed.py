@@ -53,12 +53,16 @@ import grain.python as grain
 logger = logging.getLogger(__name__)
 
 jax.distributed.initialize()
+with open('devices.log', 'w') as f:
+    mesh = Mesh(np.array(jax.local_devices()).reshape((-1, 1)), ('data', 'kernel',))
+    kernel_sharding = NamedSharding(mesh, P(None, 'kernel'))
+    conv_sharding = NamedSharding(mesh, P(None, None, None, 'kernel'))
+    sharding = NamedSharding(mesh, P('data'))
+    non_sharding = no_sharding = NamedSharding(mesh, P())
 
-mesh = Mesh(np.array(jax.devices()).reshape((-1, 1)), ('data', 'kernel',))
-kernel_sharding = NamedSharding(mesh, P(None, 'kernel'))
-conv_sharding = NamedSharding(mesh, P(None, None, None, 'kernel'))
-sharding = NamedSharding(mesh, P('data'))
-non_sharding = no_sharding = NamedSharding(mesh, P())
+    s = f"Mesh: {mesh}\nSharding: {sharding}\nNo sharding: {non_sharding}"
+    f.write(s)
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Simple example of a training script.")
