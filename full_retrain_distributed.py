@@ -313,6 +313,12 @@ def extract_kernel(unet_weights):
     path_val = {' '.join(u.key for u in x[0]): x[1] for x in path_val}
     return path_val
 
+
+def distribute_device(tensor, sharding, replicate=False):
+    global_shape = (tensor.shape[0] * jax.process_count(),) + tensor.shape[1:] if replicate else tensor.shape
+    global_array = jax.make_array_from_process_local_data(sharding, tensor, global_shape)
+    return global_array
+
 def model_sharding(unet_weights):
     num_devices = jax.device_count()
     
@@ -320,13 +326,13 @@ def model_sharding(unet_weights):
         addr = '/'.join(u.key for u in path)
         if ('kernel' in addr or 'kernel' in addr) and x.shape[-1] % num_devices == 0:
             if jnp.ndim(x) == 4:
-                return jax.device_put(x, conv_sharding)
+                return distribute_device(x, conv_sharding, replicate=True)
             elif jnp.ndim(x) == 2:
-                return jax.device_put(x, kernel_sharding)
+                return distribute_device(x, kernel_sharding, replicate=True)
             else:
-                return jax.device_put(x, non_sharding)
+                return distribute_device(x, non_sharding, replicate=True)
         else:
-            return jax.device_put(x, non_sharding)
+            return distribute_device(x, non_sharding, replicate=True)
 
     return jax.tree.map_with_path(mapper, unet_weights)
 
@@ -553,7 +559,7 @@ def main():
     )
 
     # unet_params = add_kernel_recursive(unet_params)
-    unet_params = random_init(unet_params)
+    # unet_params = random_init(unet_params)
     unet_params = model_sharding(unet_params)
     
     # Optimization
@@ -654,9 +660,9 @@ def main():
     p_train_step = train_step
 
     # Replicate the train state on each device
-    state = jax.tree.map(lambda x: jax.device_put(x, no_sharding), state)
-    text_encoder_params = jax.tree.map(lambda x: jax.device_put(x, no_sharding), text_encoder.params)
-    vae_params = jax.tree.map(lambda x: jax.device_put(x, no_sharding), vae_params)
+    state = jax.tree.map(lambda x: distribute_device(x, no_sharding, replicate=True), state)
+    text_encoder_params = jax.tree.map(lambda x: distribute_device(x, no_sharding, replicate=True), text_encoder.params)
+    vae_params = jax.tree.map(lambda x: distribute_device(x, no_sharding, replicate=True), vae_params)
 
     # Train!
     num_update_steps_per_epoch = math.ceil(len(train_dataloader))
@@ -693,7 +699,7 @@ def main():
             # train
             for _, batch in zip(range(steps_per_epoch), iter_loader):
                 unsharded_batch = batch
-                batch = jax.tree.map(lambda x: jax.device_put(x, sharding), batch)
+                batch = jax.tree.map(lambda x: distribute_device(x, sharding), batch)
                 if first_time:
                     first_time = False
                     with open('devices.log', 'a') as f:
@@ -734,10 +740,10 @@ def main():
                     pipeline.save_pretrained(
                         args.output_dir,
                         params={
-                            "text_encoder": text_encoder_params,
-                            "vae": vae_params,
-                            "unet": state.params,
-                            "safety_checker": safety_checker.params,
+                            "text_encoder": jax.device_get(text_encoder_params),
+                            "vae": jax.device_get(vae_params),
+                            "unet": jax.device_get(state.params),
+                            "safety_checker": jax.device_get(safety_checker.params),
                         },
                     )
 
