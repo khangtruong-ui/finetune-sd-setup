@@ -2,7 +2,7 @@
 # setup_env.sh
 # Professional environment setup for Flax Stable Diffusion fine-tuning on TPU/GPU
 
-set -euo pipefail  # Better error handling
+set -e  # Better error handling
 
 echo "=========================================="
 echo " Flax Stable Diffusion - Environment Setup"
