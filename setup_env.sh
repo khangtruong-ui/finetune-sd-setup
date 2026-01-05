@@ -42,7 +42,7 @@ pip install --quiet \
     optax \
     transformers==4.37.2 \
     datasets \
-    diffusers==0.30.3 \
+    diffusers==0.36.0 \
     torch torchvision \
     Pillow \
     matplotlib \
