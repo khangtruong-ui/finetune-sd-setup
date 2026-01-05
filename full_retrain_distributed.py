@@ -763,7 +763,7 @@ def main():
                     subprocess.run(f'gsutil -m cp -r ./sd-full-finetuned/* {gs_directory}/full', shell=True)
                     subprocess.run(f'gsutil -m cp *.log {gs_directory}/log', shell=True)
                     
-            if epoch % 1 == 0:
+            if epoch % 50 == 0:
                 checkpoint(state)
 
 
