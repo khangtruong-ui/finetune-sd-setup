@@ -670,7 +670,6 @@ def main():
         "text_encoder": jax.device_get(text_encoder_params),
         "vae": jax.device_get(vae_params),
         "unet": jax.device_get(state.params),
-        "safety_checker": jax.device_get(safety_checker.params),
     }
 
     # Train!
