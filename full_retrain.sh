@@ -1,4 +1,4 @@
-python full_retrain_distributed.py \
+python train.py \
     --pretrained_model_name_or_path="./sd-full-finetuned" \
     --dataset_name="KhangTruong/NWPU_Split" \
     --resolution=256 --center_crop --random_flip \
