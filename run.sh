@@ -1,5 +1,3 @@
-export SAVE_DIR="gs://khang-sd-ft" 
-
 echo "===== PWD: $(pwd) ====="
 chmod +x setup_env.sh
 chmod +x train.sh
