@@ -40,7 +40,7 @@ pip install --quiet \
     jax[tpu] \
     flax \
     optax \
-    transformers==4.37.2 \
+    transformers==4.57.3 \
     datasets \
     diffusers==0.36.0 \
     torch torchvision \
