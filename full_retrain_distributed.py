@@ -762,8 +762,9 @@ def main():
                     gs_directory = os.getenv('SAVE_DIR')
                     subprocess.run('gsutil -m cp -r ./sd-full-finetuned/* SAVE_DIR/full', shell=True)
                     subprocess.run('gsutil -m cp *.log SAVE_DIR/log', shell=True)
-            
-            checkpoint(state)
+                    
+            if epoch % 50 == 0:
+                checkpoint(state)
 
 
 if __name__ == "__main__":
