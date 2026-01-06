@@ -96,17 +96,18 @@ class Trainer:
 
         rng = jax.random.PRNGKey(self.config.seed)
         global_step = 0
-        
+
+        loader = iter(self.dataloader)
         with open('progress.log', 'w') as f:
             for epoch in range(self.config.num_train_epochs):
                 progress_bar = tqdm(
-                    enumerate(self.dataloader),
+                    zip(range(self.steps_per_epoch), loader),
                     total=self.steps_per_epoch,
                     desc=f"Epoch {epoch + 1}/{self.config.num_train_epochs}",
                     file=f,
                 )
     
-                for step, batch in progress_bar:
+                for step, batch in zip(progress_bar):
                     # Move batch to devices and shard data
                     batch = distribute_device(batch, sharding)
     
