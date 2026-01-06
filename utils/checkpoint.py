@@ -12,13 +12,14 @@ def save_checkpoint(config, epoch, state, text_encoder_params, vae_params, token
 
     os.makedirs(config.output_dir, exist_ok=True)
 
+    safety_checker = FlaxStableDiffusionSafetyChecker.from_pretrained("CompVis/stable-diffusion-safety-checker", from_pt=True)
     pipeline = FlaxStableDiffusionPipeline(
         text_encoder=text_encoder,
         vae=vae,
         unet=unet,
         tokenizer=tokenizer,
         scheduler=FlaxPNDMScheduler(beta_start=0.00085, beta_end=0.012, beta_schedule="scaled_linear"),
-        safety_checker=FlaxStableDiffusionSafetyChecker.from_pretrained("CompVis/stable-diffusion-safety-checker", from_pt=True),
+        safety_checker=safety_checker,
         feature_extractor=CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch32"),
     )
 
@@ -28,6 +29,7 @@ def save_checkpoint(config, epoch, state, text_encoder_params, vae_params, token
             "text_encoder": jax.device_get(text_encoder_params),
             "vae": jax.device_get(vae_params),
             "unet": jax.device_get(state.params),
+            "safety_checker": jax.device_get(safety_checker.params) 
         }
     )
 
