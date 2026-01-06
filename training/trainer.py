@@ -96,54 +96,55 @@ class Trainer:
 
         rng = jax.random.PRNGKey(self.config.seed)
         global_step = 0
-
-        for epoch in range(self.config.num_train_epochs):
-            progress_bar = tqdm(
-                enumerate(self.dataloader),
-                total=self.steps_per_epoch,
-                desc=f"Epoch {epoch + 1}/{self.config.num_train_epochs}",
-                disable=jax.process_index() != 0,
-            )
-
-            for step, batch in progress_bar:
-                # Move batch to devices and shard data
-                batch = distribute_device(batch, sharding)
-
-                # Precompute text embeddings (frozen text encoder)
-                encoder_hidden_states = self.precompute_text_embeddings(batch)
-                batch["encoder_hidden_states"] = encoder_hidden_states
-
-                # Train step
-                rng, dropout_rng = jax.random.split(rng)
-                self.state, loss, rng = self.train_step(
-                    self.state,
-                    self.vae_params,
-                    self.text_encoder_params,
-                    batch,
-                    dropout_rng,
+        
+        with open('progress.log', 'w') as f:
+            for epoch in range(self.config.num_train_epochs):
+                progress_bar = tqdm(
+                    enumerate(self.dataloader),
+                    total=self.steps_per_epoch,
+                    desc=f"Epoch {epoch + 1}/{self.config.num_train_epochs}",
+                    file=f,
                 )
-
-                global_step += 1
-                progress_bar.set_postfix({"loss": f"{loss:.4f}"})
-
+    
+                for step, batch in progress_bar:
+                    # Move batch to devices and shard data
+                    batch = distribute_device(batch, sharding)
+    
+                    # Precompute text embeddings (frozen text encoder)
+                    encoder_hidden_states = self.precompute_text_embeddings(batch)
+                    batch["encoder_hidden_states"] = encoder_hidden_states
+    
+                    # Train step
+                    rng, dropout_rng = jax.random.split(rng)
+                    self.state, loss, rng = self.train_step(
+                        self.state,
+                        self.vae_params,
+                        self.text_encoder_params,
+                        batch,
+                        dropout_rng,
+                    )
+    
+                    global_step += 1
+                    progress_bar.set_postfix({"loss": f"{loss:.4f}"})
+    
+                    if global_step >= self.max_steps:
+                        break
+    
+                # Checkpoint every 50 epochs or at the end
+                if (epoch + 1) % 1 == 0 or (epoch + 1) == self.config.num_train_epochs:
+                    save_checkpoint(
+                        self.config,
+                        epoch,
+                        self.state,
+                        self.text_encoder_params,
+                        self.vae_params,
+                        self.tokenizer,
+                        self.text_encoder,
+                        self.vae,
+                        self.unet,
+                    )
+    
                 if global_step >= self.max_steps:
                     break
-
-            # Checkpoint every 50 epochs or at the end
-            if (epoch + 1) % 1 == 0 or (epoch + 1) == self.config.num_train_epochs:
-                save_checkpoint(
-                    self.config,
-                    epoch,
-                    self.state,
-                    self.text_encoder_params,
-                    self.vae_params,
-                    self.tokenizer,
-                    self.text_encoder,
-                    self.vae,
-                    self.unet,
-                )
-
-            if global_step >= self.max_steps:
-                break
 
         logger.info("Training completed!")
