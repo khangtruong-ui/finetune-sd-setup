@@ -3,7 +3,7 @@ import jax
 if __name__ == "__main__":
     print("===== INITIALIZING =====")
     jax.distributed.initialize()
-    print("===== ALL HOST CAME IN PLACE =====")
+    print("===== ALL HOSTS CAME IN PLACE =====")
 
 # train.py
 from config.training_config import get_config
