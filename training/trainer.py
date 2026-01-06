@@ -72,10 +72,10 @@ class Trainer:
         self.train_step = create_train_step(self.unet, self.vae, self.noise_scheduler)
 
         # Data loader
-        self.dataloader = get_dataloader(config, self.tokenizer)
-
+        loader_length = get_dataloader(config, self.tokenizer)
+        self.dataloader = loader_length['loader']
         # Compute steps
-        self.steps_per_epoch = len(self.dataloader)
+        self.steps_per_epoch = loader_length['length']
         self.max_steps = config.max_train_steps or (config.num_train_epochs * self.steps_per_epoch)
 
     def precompute_text_embeddings(self, batch):
