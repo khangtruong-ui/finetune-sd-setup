@@ -29,8 +29,9 @@ def get_dataloader(config, tokenizer):
     def preprocess(examples):
         images = [img.convert("RGB") for img in examples["image"]]
         examples["pixel_values"] = jnp.array([transform(img) for img in images])
-
-        captions = examples['raw']
+        
+        caption_key = random.choice(['raw', 'raw_1', 'raw_2', 'raw_3', 'raw_4'])
+        captions = examples[caption_key]
         tokens = tokenizer(captions, padding="max_length", truncation=True, max_length=tokenizer.model_max_length)
         padded_tokens = tokenizer.pad(
             {'input_ids': tokens.input_ids}, padding="max_length", max_length=tokenizer.model_max_length, return_tensors="np"
