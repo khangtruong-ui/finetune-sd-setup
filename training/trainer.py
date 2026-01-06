@@ -111,6 +111,7 @@ class Trainer:
                     total=self.steps_per_epoch,
                     desc=f"Epoch {epoch + 1}/{self.config.num_train_epochs}",
                     file=f,
+                    leave=False
                 )
                 
                 for step, batch in progress_bar:
