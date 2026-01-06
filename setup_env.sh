@@ -46,7 +46,7 @@ pip install --quiet \
     torch torchvision \
     Pillow \
     matplotlib \
-    grain-python \
+    grain \
     -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
 
 echo "✓ Dependencies installed"
