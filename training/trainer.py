@@ -107,7 +107,7 @@ class Trainer:
                     file=f,
                 )
     
-                for step, batch in zip(progress_bar):
+                for step, batch in progress_bar:
                     # Move batch to devices and shard data
                     batch = distribute_device(batch, sharding)
     
