@@ -37,8 +37,6 @@ def save_checkpoint(config, epoch, state, text_encoder_params, vae_params, token
         f.write(str(epoch + 1))
 
     gs_directory = os.getenv('SAVE_DIR')
-    with open(f"{config.output_dir}/gcs_save_dir.txt", 'w') as f:
-        f.write(f"SAVE TO: {gs_directory}")
     # subprocess.run(f'gsutil -m cp -r ./sd-full-finetuned/* {gs_directory}/full', shell=True)
     # subprocess.run(f'gsutil -m cp *.log {gs_directory}/log', shell=True)
 
