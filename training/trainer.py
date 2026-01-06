@@ -106,7 +106,7 @@ class Trainer:
                     desc=f"Epoch {epoch + 1}/{self.config.num_train_epochs}",
                     file=f,
                 )
-    
+                """
                 for step, batch in progress_bar:
                     # Move batch to devices and shard data
                     batch = distribute_device(batch, sharding)
@@ -130,7 +130,7 @@ class Trainer:
     
                     if global_step >= self.max_steps:
                         break
-    
+                """
                 # Checkpoint every 50 epochs or at the end
                 if (epoch + 1) % 1 == 0 or (epoch + 1) == self.config.num_train_epochs:
                     save_checkpoint(
