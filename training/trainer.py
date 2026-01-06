@@ -34,7 +34,7 @@ class Trainer:
          self.vae_params, self.unet, self.unet_params) = load_models(config)
 
         # Shard UNet params (main trainable part)
-        self.unet_params = shard_params(self.unet_params, self.sharding)
+        self.unet_params = distribute_device(self.unet_params, no_sharding, replicate=True)
 
         # Replicate frozen components
         self.vae_params = distribute_device(self.vae_params, no_sharding, replicate=True)
