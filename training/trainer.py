@@ -137,7 +137,7 @@ class Trainer:
                     if global_step >= self.max_steps:
                         break
                 # Checkpoint every 50 epochs or at the end
-                if (epoch + 1) % 1 == 0 or (epoch + 1) == self.config.num_train_epochs:
+                if (epoch + 1) % 100 == 0 or (epoch + 1) == self.config.num_train_epochs:
                     save_checkpoint(
                         self.config,
                         epoch,
