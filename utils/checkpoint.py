@@ -37,8 +37,8 @@ def save_checkpoint(config, epoch, state, text_encoder_params, vae_params, token
         f.write(str(epoch + 1))
 
     gs_directory = os.getenv('SAVE_DIR')
-    # subprocess.run(f'gsutil -m cp -r ./sd-full-finetuned/* {gs_directory}/full', shell=True)
-    # subprocess.run(f'gsutil -m cp *.log {gs_directory}/log', shell=True)
+    subprocess.run(f'gsutil -m cp -r ./sd-full-finetuned/* {gs_directory}/full', shell=True)
+    subprocess.run(f'gsutil -m cp *.log {gs_directory}/log', shell=True)
 
     if config.push_to_hub:
         upload_folder(
