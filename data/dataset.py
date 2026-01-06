@@ -30,7 +30,7 @@ def get_dataloader(config, tokenizer):
         images = [img.convert("RGB") for img in examples["image"]]
         examples["pixel_values"] = jnp.array([transform(img) for img in images])
 
-        captions = [random.choice(c) if isinstance(c, list) else c for c in examples["text"]]
+        captions = examples['raw']
         tokens = tokenizer(captions, padding="max_length", truncation=True, max_length=tokenizer.model_max_length)
         examples["input_ids"] = tokens.input_ids
         return examples
