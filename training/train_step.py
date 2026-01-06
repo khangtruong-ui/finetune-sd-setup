@@ -48,8 +48,7 @@ def create_train_step(unet, vae, noise_scheduler):
             )
 
             # Get text embeddings
-            encoder_hidden_states = text_encoder_params["params"]  # frozen
-            encoder_hidden_states = text_encoder_params["params"]  # we pass full frozen tree
+            encoder_hidden_states = text_encoder_params
             # Actually we pass the output directly in trainer, so adjust accordingly
 
             # In practice, we pre-compute text embeddings outside if frozen
