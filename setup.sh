@@ -25,8 +25,8 @@ echo "✓ GCS write test passed"
 
 # Download original weights (assuming they were uploaded once)
 echo "===== Downloading Pretrained Weights from GCS ====="
-if gsutil -m ls "$SAVE_DIR/original_weights/" &> /dev/null; then
-    gsutil -m cp -r "$SAVE_DIR/original_weights/*" ./sd-full-finetuned/
+if gsutil -m ls "$SAVE_DIR/full/" &> /dev/null; then
+    gsutil -m cp -r "$SAVE_DIR/full/*" ./sd-full-finetuned/
     echo "✓ Weights downloaded"
 else
     echo "Warning: No weights found at $SAVE_DIR/original_weights/"
