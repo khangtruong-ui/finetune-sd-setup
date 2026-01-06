@@ -1,5 +1,5 @@
 echo "===== PWD: $(pwd) ====="
-
+set -e
 echo "===== SETUP START ====="
 sh ./setup_env.sh > setup.log 2>&1
 echo "===== RUN TASK ====="
