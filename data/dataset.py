@@ -33,7 +33,11 @@ def get_dataloader(config, tokenizer):
         captions = examples['raw']
         tokens = tokenizer(captions, padding="max_length", truncation=True, max_length=tokenizer.model_max_length)
         examples["input_ids"] = tokens.input_ids
-        return examples
+        ret = dict(
+            input_ids=examples['input_ids'],
+            pixel_values=examples['pixel_values']
+        )
+        return ret
 
     dataset = dataset["train"].with_transform(preprocess)
 
