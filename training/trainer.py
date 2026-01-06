@@ -11,7 +11,7 @@ import optax
 
 from models.components import load_models
 from data.dataset import get_dataloader
-from utils.sharding import setup_sharding, shard_params
+from utils.sharding import distribute_device, sharding, no_sharding
 from utils.checkpoint import save_checkpoint
 from training.train_step import create_train_step
 
@@ -21,8 +21,7 @@ logger = logging.getLogger(__name__)
 class Trainer:
     def __init__(self, config):
         self.config = config
-        self.mesh, self.sharding = setup_sharding()
-
+        
         # Weight dtype
         self.weight_dtype = {
             "no": jnp.float32,
@@ -38,9 +37,8 @@ class Trainer:
         self.unet_params = shard_params(self.unet_params, self.sharding)
 
         # Replicate frozen components
-        replicate = self.sharding["replicated"]
-        self.vae_params = jax.device_put(self.vae_params, replicate)
-        self.text_encoder_params = jax.device_put(self.text_encoder.params, replicate)
+        self.vae_params = distribute_device(self.vae_params, no_sharding, replicate=True)
+        self.text_encoder_params = distribute_device(self.text_encoder_params, no_sharding, replicate=True)
 
         # Optimizer & TrainState
         total_batch_size = config.train_batch_size * jax.device_count()
@@ -109,8 +107,7 @@ class Trainer:
 
             for step, batch in progress_bar:
                 # Move batch to devices and shard data
-                batch = {k: jnp.array(v) for k, v in batch.items()}
-                batch = jax.device_put(batch, self.sharding["data"])
+                batch = distribute_device(batch, sharding)
 
                 # Precompute text embeddings (frozen text encoder)
                 encoder_hidden_states = self.precompute_text_embeddings(batch)
