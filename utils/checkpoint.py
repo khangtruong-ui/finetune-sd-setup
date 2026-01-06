@@ -5,6 +5,7 @@ from diffusers.pipelines.stable_diffusion import FlaxStableDiffusionSafetyChecke
 from transformers import CLIPImageProcessor
 from huggingface_hub import upload_folder
 import jax
+import subprocess
 
 def save_checkpoint(config, epoch, state, text_encoder_params, vae_params, tokenizer, text_encoder, vae, unet):
     if jax.process_index() != 0:
