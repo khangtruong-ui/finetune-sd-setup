@@ -38,7 +38,7 @@ class Trainer:
 
         # Replicate frozen components
         self.vae_params = distribute_device(self.vae_params, no_sharding, replicate=True)
-        self.text_encoder_params = distribute_device(self.text_encoder_params, no_sharding, replicate=True)
+        self.text_encoder_params = self.text_encoder.params = distribute_device(self.text_encoder.params, no_sharding, replicate=True)
 
         # Optimizer & TrainState
         total_batch_size = config.train_batch_size * jax.device_count()
