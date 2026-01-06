@@ -32,7 +32,10 @@ def get_dataloader(config, tokenizer):
 
         captions = examples['raw']
         tokens = tokenizer(captions, padding="max_length", truncation=True, max_length=tokenizer.model_max_length)
-        examples["input_ids"] = tokens.input_ids
+        padded_tokens = tokenizer.pad(
+            {"input_ids": tokens.input_ids}, padding="max_length", max_length=tokenizer.model_max_length, return_tensors="np"
+        )
+        examples["input_ids"] = padded_tokens
         ret = dict(
             input_ids=examples['input_ids'],
             pixel_values=examples['pixel_values']
