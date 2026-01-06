@@ -53,4 +53,6 @@ def get_dataloader(config, tokenizer):
         sampler=sampler,
         operations=[grain.Batch(batch_size=config.train_batch_size * jax.local_device_count(), drop_remainder=True)],
     )
-    return loader
+
+    loader_length = len(dataset) // (config.train_batch_size * jax.device_count())
+    return {'loader': loader, 'length': loader_length}
