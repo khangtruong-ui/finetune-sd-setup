@@ -8,4 +8,3 @@ python train.py \
     --max_grad_norm=1 \
     --revision="flax"\
     --output_dir="./sd-full-finetuned" \
-    --caption_column="raw"
