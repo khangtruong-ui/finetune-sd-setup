@@ -88,6 +88,11 @@ class Trainer:
         )[0]
         return encoder_hidden_states
 
+    def get_init_epoch(self):
+        with open(f"{self.config.output_dir}/epoch.txt") as f:
+            return int(f.read())
+
+
     def train(self):
         logger.info("***** Starting Training *****")
         logger.info(f"  Num examples: ~{self.steps_per_epoch * self.config.train_batch_size * jax.device_count()}")
@@ -97,9 +102,10 @@ class Trainer:
         rng = jax.random.PRNGKey(self.config.seed)
         global_step = 0
 
+        init_epoch = self.get_init_epoch()
         loader = iter(self.dataloader)
         with open('progress.log', 'w') as f:
-            for epoch in range(self.config.num_train_epochs):
+            for epoch in range(init_epoch, self.config.num_train_epochs):
                 progress_bar = tqdm(
                     zip(range(self.steps_per_epoch), loader),
                     total=self.steps_per_epoch,
