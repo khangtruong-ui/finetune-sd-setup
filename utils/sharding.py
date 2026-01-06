@@ -4,13 +4,15 @@ import jax.numpy as jnp
 from jax.sharding import Mesh, NamedSharding, PartitionSpec as P
 import numpy as np
 
+from utils.tree_map import tree_map
+
 mesh = Mesh(np.array(jax.devices()).reshape((-1, 1)), ('data', 'kernel',))
 kernel_sharding = NamedSharding(mesh, P(None, 'kernel'))
 conv_sharding = NamedSharding(mesh, P(None, None, None, 'kernel'))
 sharding = NamedSharding(mesh, P('data'))
 non_sharding = no_sharding = NamedSharding(mesh, P())
 
-
+@tree_map
 def distribute_device(tensor, sharding, replicate=False):
     if type(tensor) in [int, float, str]:
         return tensor
