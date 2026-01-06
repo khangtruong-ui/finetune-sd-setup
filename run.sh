@@ -1,4 +1,5 @@
-echo "===== PWD: $(pwd) ====="
+echo "===== WORKING DIRECTORY: $(pwd) ====="
+echo "===== SAVE DIRECTORY: $SAVE_DIR ====="
 set -e
 echo "===== SETUP START ====="
 sh ./setup.sh > setup.log 2>&1
