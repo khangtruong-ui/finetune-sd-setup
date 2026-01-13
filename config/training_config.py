@@ -8,7 +8,7 @@ class TrainingConfig:
     output_dir: str = "sd-model-finetuned"
     dataset_name: str = None
     train_data_dir: str = None
-    resolution: int = 512
+    resolution: int = 256
     train_batch_size: int = 16
     num_train_epochs: int = 100
     max_train_steps: int = None
